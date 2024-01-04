@@ -68,6 +68,7 @@ def pubsub_handler():
         logger.info("Reading items from the database.")
         items = db.query(Item).all()
         logger.info(f"######## Items: {items}")
+        logger.info("Items successfully read.")
         return items
     except Exception as e:
         logger.error(f"Error during database read: {e}")
