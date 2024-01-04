@@ -5,17 +5,16 @@ steps:
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/$PROJECT_ID/your-service-image:latest"]
 
-  # - name: "gcr.io/cloud-builders/gcloud"
-  #   args:
-  #     [
-  #       "run",
-  #       "deploy",
-  #       "your-service-image",
-  #       "--image",
-  #       "gcr.io/$PROJECT_ID/your-service-image:latest",
-  #       "--region",
-  #       "us-central1",
-  #     ]
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      - "run"
+      - "deploy"
+      - "pdf-processor-service" # Replace with the name of your cloud run service
+      - "--image=gcr.io/$PROJECT_ID/your-service-image:latest"
+      - "--region=us-central1" #Replace with your region, for example us-center1
+      - "--platform=managed"
+      - "--allow-unauthenticated" # Remove this line if your service requires authentication
 
 images:
   - "gcr.io/$PROJECT_ID/your-service-image:latest"
