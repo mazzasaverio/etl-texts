@@ -51,7 +51,7 @@ def pubsub_handler():
 
     db = SessionLocal()
     try:
-        new_item = Item(name="nuovotest")
+        new_item = Item(name="nuovotest2")
         db.add(new_item)
         db.commit()
         db.refresh(new_item)
@@ -70,7 +70,7 @@ def pubsub_handler():
         logger.info(f"######## Items: {items}")
         logger.info("Items successfully read.")
         logger.info("<<<Items successfully read.")
-        logger.info("<<<Items successfully read 23333.")
+        logger.info("444444444Items successfully read ddddd.")
         return items
     except Exception as e:
         logger.error(f"Error during database read: {e}")
