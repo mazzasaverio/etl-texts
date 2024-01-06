@@ -4,11 +4,11 @@ __pycache__/
 *$py.class
 custom_tree_and_files_corrected.txt
 code_report.py
-
-
+*.pdf
+/data*
 # C extensions
 *.so
-
+*.json
 # Distribution / packaging
 .Python
 build/
