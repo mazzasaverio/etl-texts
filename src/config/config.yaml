@@ -1,4 +1,0 @@
-document_folder: "data/raw/docs_cat_one/full"
-
-mongodb:
-  database_name: "mydatabase" # The name of your MongoDB database

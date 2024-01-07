@@ -3,20 +3,16 @@ from config.db_config import Config
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 from database.models.docs_name_categ import DocsNameCateg
-import yaml
-from config.logger_config import logger  # Make sure to import the logger
-from pathlib import Path
+from config.logger_config import logger
+import os
+from dotenv import load_dotenv
 
-# Correct the path by using pathlib
-config_path = Path(__file__).parent.parent.parent / "config" / "config.yaml"
-
-with config_path.open() as config_file:
-    config = yaml.safe_load(config_file)
+load_dotenv()
 
 
 class Database:
     client = None
-    database_name = database_name = config["mongodb"]["database_name"]
+    database_name = os.getenv("MONGODB_DATABASE")
 
     @classmethod
     async def initialize_database(cls):
