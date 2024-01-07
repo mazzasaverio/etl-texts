@@ -15,7 +15,7 @@ Configuration settings are managed via a `.env` file. This includes:
 ## Key Features
 
 - **FastAPI Integration**: Utilizes FastAPI for handling HTTP requests, allowing for scalable and efficient request management. This is particularly useful for handling various types of processing tasks in a web service context.
-- **Benie as ODM**: Currently, Benie is used as the Object Document Mapper (ODM) primarily with MongoDB. Future updates will include support for other NoSQL databases, as well as SQL databases using SQLAlchemy ORM.
+- **Beanie as ODM**: Currently, Beanie is used as the Object Document Mapper (ODM) primarily with MongoDB. Future updates will include support for other NoSQL databases, as well as SQL databases using SQLAlchemy ORM.
 - **Text Extraction**: Leverages `unstructured` for automated text extraction with partitioning capabilities. This feature is crucial for handling large volumes of PDF files and extracting text efficiently.
 
 ## Future Enhancements
