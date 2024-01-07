@@ -6,6 +6,7 @@ custom_tree_and_files_corrected.txt
 code_report.py
 *.pdf
 /data*
+/archive/*
 # C extensions
 *.so
 *.json
