@@ -1,7 +1,7 @@
 from unstructured.partition.pdf import partition_pdf
 from unstructured.staging.base import elements_to_json
 import os
-from utils.logger_config import logger
+from config.logger_config import logger
 
 
 def extract_text(filename):
@@ -10,7 +10,8 @@ def extract_text(filename):
     filename_output = (
         f"data/processed/{os.path.basename(filename).replace('.pdf', '.json')}"
     )
-
-    elements_to_json(elements, filename=filename_output)
-
-    return filename_output
+    if filename is not None:
+        elements_to_json(elements, filename=filename_output)
+        return filename_output
+    else:
+        return elements_to_json(elements)

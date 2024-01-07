@@ -1,5 +1,5 @@
 import json
-from utils.logger_config import logger
+from config.logger_config import logger
 
 
 def process_json_elements(json_file_path, page_range, element_types=["All"]):

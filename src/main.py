@@ -1,80 +1,66 @@
-import yaml
+from contextlib import asynccontextmanager
 import os
-import glob
+import yaml
+from fastapi import FastAPI
+from services.text_extractor import extract_text
+from database.connection.odm_connection import Database
+from database.models.docs_name_categ import DocsNameCateg
 from datetime import datetime
+from config.logger_config import logger
+from pathlib import Path
 
-from text_extraction import extract_text
-from text_process import process_json_elements
-from database.session import session_scope
-from database.models import TextData
-from loguru import logger
-import sys
+app = FastAPI()
 
-from utils.logger_config import logger
+# Load configurations
+config_path = Path(__file__).parent / "config" / "config.yaml"
+with config_path.open() as config_file:
+    config = yaml.safe_load(config_file)
 
-
-def load_config(config_path="config/config.yaml"):
-    with open(config_path, "r") as file:
-        return yaml.safe_load(file)
+document_folder = config["document_folder"]
 
 
-def get_file_paths(folder_path):
-    # Assuming the documents are PDFs, modify if different
-    return glob.glob(os.path.join(folder_path, "*.pdf"))
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Load the database and other resources before startup
+    await Database.initialize_database()
+    yield
+    # Clean up resources, if needed, before shutdown
 
 
-def main():
-    # Load configuration
-    config = load_config()
+app.lifespan = lifespan
 
-    # Get path to the document folder
-    document_folder = config["document_folder"]
 
-    # Get list of file paths
-    file_paths = get_file_paths(document_folder)
+@app.get("/")
+async def process_documents():
+    for filename in os.listdir(document_folder):
+        if filename.endswith(".pdf"):
+            file_path = os.path.join(document_folder, filename)
+            file_name_without_extension, _ = os.path.splitext(filename)
+            file_path_output = f"data/processed/{filename.replace('.pdf', '.json')}"
+            logger.info(f"Processing file: {filename}")
+            elements = extract_text(file_path, file_path_output)
 
-    # Process each file
-    for file_path in file_paths:
-        logger.info(f"Processing file: {file_path}")
-        try:
-            with session_scope() as session:
-                # Check if file already processed
-                exists = (
-                    session.query(TextData)
-                    .filter(TextData.file_name == file_path)
-                    .first()
-                )
-                if not exists:
-                    filename_output = extract_text(file_path)
+            # Create and save document instance in MongoDB
+            doc = DocsNameCateg(
+                id_file=file_name_without_extension,  # Set an appropriate id
+                file_name=filename,
+                date_download=datetime.now(),
+                date_extraction=datetime.now(),
+                elements=elements,
+            )
+            await Database.save(doc)
 
-                    logger.info(f"Extracted text to: {filename_output}")
 
-                    # Define the element type and page range here
-                    # element_types_list = ["NarrativeText"]
-                    element_types_list = ["All"]
-                    page_range = (1, 4)  # Example page range (inclusive)
-
-                    # Process the JSON file
-                    processed_text = process_json_elements(
-                        filename_output, page_range, element_types_list
-                    )
-
-                    # Create new TextData object
-                    element_types_string = ",".join(element_types_list)
-                    new_record = TextData(
-                        file_name=file_path.split("/")[-1],
-                        processing_time=datetime.utcnow(),
-                        extracted_pages=str(page_range),
-                        element_types=element_types_string,
-                        extracted_text=processed_text,
-                    )
-                    session.add(new_record)
-                    logger.info(f"Processed and added: {file_path}")
-                else:
-                    logger.info(f"File already processed: {file_path}")
-        except Exception as e:
-            logger.error(f"Error processing file {file_path}: {e}")
+async def main():
+    await Database.initialize_database()
+    await process_documents()
 
 
 if __name__ == "__main__":
-    main()
+    # import uvicorn
+
+    # uvicorn.run(app, host="0.0.0.0", port=8080)
+
+    import asyncio
+
+    asyncio.run(main())
