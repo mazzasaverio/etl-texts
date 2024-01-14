@@ -8,6 +8,7 @@ code_report.py
 .ipynb
 /data*
 data
+archive
 /archive/*
 # C extensions
 *.so

@@ -33,7 +33,7 @@ def analyze_text_with_gpt3(text):
                 },
                 {
                     "role": "user",
-                    "content": f"This text is extracted from a document: '{text[:600]}'. {prompt_role_user}",
+                    "content": f"This text is extracted from a document: '{text}'. {prompt_role_user}",
                 },
             ],
             max_tokens=130,
@@ -54,7 +54,13 @@ def process_file(file_name):
     with open(file_path, "r") as file:
         data = json.load(file)
 
-    analysis_result = analyze_text_with_gpt3(data["tot_text_cleaned"])
+    text_analyzed = data["tot_text_cleaned"][:600]
+
+    analysis_result = analyze_text_with_gpt3(text_analyzed)
+
+    analysis_result["tot_text_cleaned"] = data["tot_text_cleaned"]
+    analysis_result["tot_text"] = data["tot_text"]
+    analysis_result["text_analyzed"] = text_analyzed
 
     # Save the updated data in the destination path
     dest_file_path = os.path.join(destination_path, file_name)
