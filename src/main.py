@@ -13,25 +13,19 @@ from services.text_cleaner import main as clean_texts
 # Load environment variables
 load_dotenv()
 
-
-# Setting up logger (assuming a similar setup as in settings.py)
-def setup_logger():
-    logger.remove()
-    logger.add(
-        sys.stdout,
-        level="INFO",
-        format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",
-    )
-    logger.add(
-        "logs/etl_texts_{time}.log",
-        rotation="1 day",
-        retention="7 days",
-        level="INFO",
-        format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",
-    )
-
-
-setup_logger()
+logger.remove()
+logger.add(
+    sys.stdout,
+    level="INFO",
+    format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",
+)
+logger.add(
+    "logs/etl_texts_{time}.log",
+    rotation="1 day",
+    retention="7 days",
+    level="INFO",
+    format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",
+)
 
 
 def main():
@@ -51,12 +45,6 @@ def main():
     logger.info("Starting Text Cleaning")
     clean_texts()
     logger.info("Text Cleaning Completed")
-
-    # Step 4: Text Embedding
-    # Uncomment and adjust the following lines when text_embeddings service is ready
-    # logger.info("Starting Text Embedding")
-    # embed_texts()
-    # logger.info("Text Embedding Completed")
 
     logger.info("ETL-Texts Pipeline Completed")
 

@@ -30,6 +30,10 @@ def extract_text(file_path, file_path_output=None):
         elements = partition(filename=file_path, strategy="fast")
         logger.info(f"Extracted {len(elements)} elements")
 
+        logger.info(f"Writing elements to {file_path_output}")
+
+        file_path_output = file_path_output.replace(".pdf", ".json")
+
         if file_path_output is not None:
             elements_to_json(elements, filename=file_path_output)
         return elements or []

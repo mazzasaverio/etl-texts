@@ -99,17 +99,14 @@ def translate_and_save(data, file_name, dest_dir, target_lang):
             }
         )
 
-    new_file_path = os.path.join(
-        dest_dir, file_name.replace(".json", "_translated.json")
-    )
+    new_file_path = os.path.join(dest_dir, file_name)
     with open(new_file_path, "w") as json_file:
         json.dump(translated_elements, json_file, ensure_ascii=False, indent=4)
 
 
 def translation_exists(file_name, dest_dir):
     """Check if a translated version of the file already exists in the destination directory."""
-    translated_file_name = file_name.replace(".json", "_translated.json")
-    return translated_file_name in os.listdir(dest_dir)
+    return file_name in os.listdir(dest_dir)
 
 
 if __name__ == "__main__":

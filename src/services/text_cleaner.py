@@ -3,7 +3,7 @@ import json
 from dotenv import load_dotenv
 from loguru import logger
 
-from utils.clean_text import (
+from .utils.clean_text import (
     clean_text_type1,
 )  # Assuming you have a text cleaning function
 
