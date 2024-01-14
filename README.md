@@ -1,5 +1,3 @@
-- prevedere input e output in modo poter scegliere o alternare data lake, db sql o db nosql
-
 # ETL-Texts
 
 ## Overview
