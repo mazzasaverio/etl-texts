@@ -1,5 +1,8 @@
 effdet==0.4.1
+ipykernel==6.28.0
 loguru==0.7.2
+openai==1.7.2
+pickleshare==0.7.5
 pikepdf==8.11.2
 pip-chill==1.0.3
 psycopg2-binary==2.9.9
