@@ -2,14 +2,13 @@
 
 ## Overview
 
-ETL-Texts has the aim of becoming one pipeline designed for extracting, translating, cleaning, and transforming text files into embeddings, making them readily usable for training or inference in various natural language processing models. It operates on the principle that each step in the process requires an input path and an output path, allowing for independent execution or a sequential flow through the pipeline.
+ETL-Texts has the aim of becoming one pipeline designed for extracting, translating, cleaning, and transforming text files, making them readily usable for different objectives. It operates on the principle that each step in the process requires an input path and an output path, allowing for independent execution or a sequential flow through the pipeline.
 
 ## Features
 
 - **Text Extraction**: Utilizes the `unstructured` package to extract text. (See `src/services/text_extractor.py`)
 - **Text Translation**: Employs a multilingual model for optional text translation. (See `src/services/text_translator.py`)
 - **Text Cleaning**: Aggregates and cleans text according to specific requirements. (Currently under development, see `src/services/text_cleaner.py`)
-- **Text Embedding**: Processes embedding as per user-defined requirements and saves it either in storage or in a vector database. (Currently under development, see `src/services/text_embeddings.py`)
 
 The system is built on the principle that a file will be processed only if it hasn't been processed previously, which is determined by checking the destination path. Outputs are consistently formatted in JSON to facilitate flexible manipulation and ingestion stages.
 

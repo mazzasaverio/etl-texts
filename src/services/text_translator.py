@@ -31,26 +31,20 @@ model = M2M100ForConditionalGeneration.from_pretrained(model_name)
 def translate_text(text, source_language, target_language):
     """Translate text from source language to the target language."""
 
-    # try:
-    #     # logger.info(f"{source_language} - {target_language}")
-    #     source_language = detect(text)
-    #     # logger.info(f"Detected language {text}: {source_language}")
-    # except:
-    #     logger.error(f"Could not detect language for text: {text}")
-    #     return text
-
     language_code_map = {
         "nld": "nl",  # Dutch
         "eng": "en",  # English
         "fra": "fr",  # French
         "deu": "de",  # German
         "ita": "it",  # Italian
+        "por": "pt",  # Portuguese
+        "spa": "es",  # Spanish
+        "tgl": "tl",  # Tagalog
+        "vie": "vi",  # Vietnamese
+        "zho": "zh",  # Chinese
     }
 
     source_language = language_code_map.get(source_language, source_language)
-    # logger.info(
-    #     f"Source language: {source_language} - Target language: {target_language}"
-    # )
 
     if source_language == target_language:
         return text  # Skip translation if languages are the same
