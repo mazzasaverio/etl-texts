@@ -1,0 +1,54 @@
+import os
+import json
+from dotenv import load_dotenv
+from loguru import logger
+
+# from your_text_cleaning_function import (
+#     clean_text,
+# )  # Assuming you have a text cleaning function
+
+# Load environment variables
+load_dotenv()
+source_path = os.getenv("PATH_CLEANING_SOURCE")
+destination_path = os.getenv("PATH_CLEANING_DESTINATION")
+
+
+def read_json(file_path):
+    with open(file_path, "r") as file:
+        return json.load(file)
+
+
+def write_json(data, file_path):
+    with open(file_path, "w") as file:
+        json.dump(data, file, indent=4)
+
+
+def process_file(file_path):
+    data = read_json(file_path)
+    tot_text = " ".join([element["text_translated"] for element in data])
+    logger.info(f"Cleaning text: {tot_text}")
+    # tot_text_cleaned = clean_text(tot_text)  # Apply your cleaning function
+
+    return {
+        "element_id": data[0]["element_id"],
+        "filename": data[0]["filename"],
+        "tot_text": tot_text,
+        "tot_text_cleaned": tot_text,
+    }
+
+
+def file_exists_in_destination(filename, dest_path):
+    return os.path.exists(os.path.join(dest_path, filename))
+
+
+def main():
+    for filename in os.listdir(source_path):
+        if filename.endswith(".json") and not file_exists_in_destination(
+            filename, destination_path
+        ):
+            processed_data = process_file(os.path.join(source_path, filename))
+            write_json(processed_data, os.path.join(destination_path, filename))
+
+
+if __name__ == "__main__":
+    main()
