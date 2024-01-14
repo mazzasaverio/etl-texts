@@ -9,8 +9,8 @@ from loguru import logger
 
 # Load environment variables
 load_dotenv()
-source_path = os.getenv("PATH_CLEANING_SOURCE")
-destination_path = os.getenv("PATH_CLEANING_DESTINATION")
+source_path = os.getenv("PATH_SOURCE_TEXT_CLEANING")
+destination_path = os.getenv("PATH_DESTINATION_TEXT_CLEANING")
 
 
 def read_json(file_path):

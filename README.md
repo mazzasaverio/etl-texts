@@ -1,38 +1,26 @@
-# PDFs Text Extraction
+- prevedere input e output in modo poter scegliere o alternare data lake, db sql o db nosql
+
+# ETL-Texts
 
 ## Overview
 
-This repository provides a foundational framework for text extraction from a list of PDF files. It's designed to offer a starting point for projects that require efficient and automated text extraction from PDF documents.
+ETL-Texts has the aim of becoming one pipeline designed for extracting, translating, cleaning, and transforming text files into embeddings, making them readily usable for training or inference in various natural language processing models. It operates on the principle that each step in the process requires an input path and an output path, allowing for independent execution or a sequential flow through the pipeline.
+
+## Features
+
+- **Text Extraction**: Utilizes the `unstructured` package to extract text. (See `src/services/text_extractor.py`)
+- **Text Translation**: Employs a multilingual model for optional text translation. (See `src/services/text_translator.py`)
+- **Text Cleaning**: Aggregates and cleans text according to specific requirements. (Currently under development, see `src/services/text_cleaner.py`)
+- **Text Embedding**: Processes embedding as per user-defined requirements and saves it either in storage or in a vector database. (Currently under development, see `src/services/text_embeddings.py`)
+
+The system is built on the principle that a file will be processed only if it hasn't been processed previously, which is determined by checking the destination path. Outputs are consistently formatted in JSON to facilitate flexible manipulation and ingestion stages.
 
 ## Configuration
 
-Configuration settings are managed via a `.env` file. This includes:
+Input and output paths are set through the `.env` file (refer to `.env.example`, which should be renamed to `.env`).
 
-- **Data Source**: Specifying the source of the PDF files.
-- **Data Destination**: Defining the output destination, which can be another folder or a database.
-- **Environment Setup**: Setting the operational mode (Development or Production) to ensure optimal performance and resource utilization.
+## Roadmap
 
-## Key Features
-
-- **FastAPI Integration**: Utilizes FastAPI for handling HTTP requests, allowing for scalable and efficient request management. This is particularly useful for handling various types of processing tasks in a web service context.
-- **Beanie as ODM**: Currently, Beanie is used as the Object Document Mapper (ODM) primarily with MongoDB. Future updates will include support for other NoSQL databases, as well as SQL databases using SQLAlchemy ORM.
-- **Text Extraction**: Leverages `unstructured` for automated text extraction with partitioning capabilities. This feature is crucial for handling large volumes of PDF files and extracting text efficiently.
-
-## Future Enhancements
-
-- **Parallel Processing**: The next step is to implement parallel processing for the text extractor. This enhancement aims to significantly improve the efficiency and speed of text extraction from multiple PDF files simultaneously.
-
-## Getting Started
-
-1. Clone the repository.
-2. Configure your `.env` file with the appropriate settings.
-3. Install required dependencies.
-4. Run the application in your chosen environment (Development or Production).
-
-## Contribution
-
-Contributions to enhance this project are welcome. Feel free to fork the repository, make improvements, and submit a pull request.
-
-## License
-
-This project is open-sourced under the [MIT License](LICENSE).
+- Parallelization and containerization of the process for enhanced performance.
+- Automation of the process by orchestrating an event-driven pipeline capable of leveraging serverless computing depending on the scale and processing time requirements.
+- Provisioning for varied inputs and outputs to facilitate choice or alternation between data lakes, SQL databases, or NoSQL databases.

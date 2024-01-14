@@ -7,9 +7,10 @@ from tqdm import tqdm
 
 # Load environment variables
 load_dotenv()
-source_path = os.getenv("PATH_TRANSLATION_SOURCE")
-destination_path = os.getenv("PATH_TRANSLATION_DESTINATION")
-target_language = os.getenv("TARGET_LANGUAGE")
+source_path = os.getenv("PATH_SOURCE_TEXT_TRANSLATION")
+destination_path = os.getenv("PATH_DESTINATION_TEXT_TRANSLATION")
+target_language = os.getenv("TARGET_LANGUAGE_TRANSLATION")
+
 
 # Check if the paths and target language are set
 if not source_path:
