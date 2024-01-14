@@ -3,9 +3,9 @@ import json
 from dotenv import load_dotenv
 from loguru import logger
 
-# from your_text_cleaning_function import (
-#     clean_text,
-# )  # Assuming you have a text cleaning function
+from utils.clean_text import (
+    clean_text_type1,
+)  # Assuming you have a text cleaning function
 
 # Load environment variables
 load_dotenv()
@@ -27,13 +27,13 @@ def process_file(file_path):
     data = read_json(file_path)
     tot_text = " ".join([element["text_translated"] for element in data])
     logger.info(f"Cleaning text: {tot_text}")
-    # tot_text_cleaned = clean_text(tot_text)  # Apply your cleaning function
+    tot_text_cleaned = clean_text_type1(tot_text)
 
     return {
         "element_id": data[0]["element_id"],
         "filename": data[0]["filename"],
         "tot_text": tot_text,
-        "tot_text_cleaned": tot_text,
+        "tot_text_cleaned": tot_text_cleaned,
     }
 
 
