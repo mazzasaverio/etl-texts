@@ -38,7 +38,11 @@ def main():
 
     # Step 2: Text Translation
     logger.info("Starting Text Translation")
-    translate_texts()
+    source_path = os.getenv("PATH_SOURCE_TEXT_TRANSLATION")
+    destination_path = os.getenv("PATH_DESTINATION_TEXT_TRANSLATION")
+    target_language = os.getenv("TARGET_LANGUAGE_TRANSLATION")
+
+    translate_texts(source_path, destination_path, target_language)
     logger.info("Text Translation Completed")
 
     # Step 3: Text Cleaning
