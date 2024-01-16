@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 
 def clean_text_type1(text):
     """
-    Cleans input text for embedding and classification.
+    Cleans input text.
 
     Steps:
     1. HTML decoding: Converts HTML entities to their corresponding characters.
@@ -27,6 +27,12 @@ def clean_text_type1(text):
 
     # Removing URLs
     text = re.sub(r"http\S+", "", text)
+
+    # Removing email addresses
+    text = re.sub(r"\S+@\S+", "", text)
+
+    # Removing phone numbers (basic pattern matching)
+    text = re.sub(r"\b\d{10,15}\b", "", text)  # Matches 10 to 15 digit numbers
 
     # Removing special characters
     text = re.sub(r"[^a-zA-Z0-9\s]", "", text)

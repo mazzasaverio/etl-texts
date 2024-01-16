@@ -2,10 +2,15 @@ import os
 import json
 from dotenv import load_dotenv
 from loguru import logger
+import sys
 
-from .utils.clean_text import (
-    clean_text_type1,
-)  # Assuming you have a text cleaning function
+project_root = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+)
+if project_root not in sys.path:
+    sys.path.append(project_root)
+
+from src.services.utils.clean_text import clean_text_type1
 
 # Load environment variables
 load_dotenv()
@@ -25,16 +30,18 @@ def write_json(data, file_path):
 
 def process_file(file_path):
     data = read_json(file_path)
-    tot_text = " ".join([element["text_translated"] for element in data])
-    logger.info(f"Cleaning text: {tot_text}")
-    tot_text_cleaned = clean_text_type1(tot_text)
+    try:
+        tot_text = " ".join([element["text_translated"] for element in data])
+        tot_text_cleaned = clean_text_type1(tot_text)
 
-    return {
-        "element_id": data[0]["element_id"],
-        "filename": data[0]["filename"],
-        "tot_text": tot_text,
-        "tot_text_cleaned": tot_text_cleaned,
-    }
+        return {
+            "filename": data[0]["filename"],
+            "tot_text_cleaned": tot_text_cleaned,
+            "tot_text_raw": tot_text,
+        }
+    except Exception as e:
+        logger.error(f"Error cleaning text from {file_path}: {e}")
+        return {}
 
 
 def file_exists_in_destination(filename, dest_path):
@@ -47,7 +54,8 @@ def main():
             filename, destination_path
         ):
             processed_data = process_file(os.path.join(source_path, filename))
-            write_json(processed_data, os.path.join(destination_path, filename))
+            if processed_data:
+                write_json(processed_data, os.path.join(destination_path, filename))
 
 
 if __name__ == "__main__":
