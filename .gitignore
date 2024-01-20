@@ -38,7 +38,11 @@ MANIFEST
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
-data_new/*/*
+# Ignora tutti i file in data_new e sottocartelle
+data/*/*
+
+# Non ignorare i file .gitkeep
+!data/**/.gitkeep
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
