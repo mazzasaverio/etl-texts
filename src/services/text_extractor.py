@@ -19,17 +19,11 @@ logger.add(
     format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",
 )
 
-# Load environment variables
-load_dotenv()
-source_path = os.getenv("PATH_SOURCE_TEXT_EXTRACTION")
-destination_path = os.getenv("PATH_DESTINATION_TEXT_EXTRACTION")
-
 
 def extract_text(file_path, file_path_output=None):
     try:
-        elements = partition(filename=file_path, strategy="fast")
+        elements = partition(filename=file_path)
         logger.info(f"Extracted {len(elements)} elements")
-
         logger.info(f"Writing elements to {file_path_output}")
 
         file_path_output = file_path_output.replace(".pdf", ".json")
@@ -54,6 +48,7 @@ def get_list_files(source_path, destination_path):
     dest_files = set(os.path.splitext(f)[0] for f in os.listdir(destination_path))
 
     logger.info(f"Found {len(dest_files)} documents in destination folder.")
+    logger.info(f"Source len path: {len(os.listdir(source_path))}")
 
     # Use list comprehension to filter and collect the files
     list_tot_files = [
@@ -69,7 +64,7 @@ def get_list_files(source_path, destination_path):
     return list_tot_files
 
 
-def main():
+def main(source_path, destination_path):
     list_files = get_list_files(source_path, destination_path)
     len_source = len(list_files)
     len_destination = len(os.listdir(destination_path))

@@ -1,6 +1,5 @@
 import os
 import json
-from dotenv import load_dotenv
 from loguru import logger
 import sys
 
@@ -11,11 +10,6 @@ if project_root not in sys.path:
     sys.path.append(project_root)
 
 from src.services.utils.clean_text import clean_text_type1
-
-# Load environment variables
-load_dotenv()
-source_path = os.getenv("PATH_SOURCE_TEXT_CLEANING")
-destination_path = os.getenv("PATH_DESTINATION_TEXT_CLEANING")
 
 
 def read_json(file_path):
@@ -48,7 +42,7 @@ def file_exists_in_destination(filename, dest_path):
     return os.path.exists(os.path.join(dest_path, filename))
 
 
-def main():
+def main(source_path, destination_path):
     for filename in os.listdir(source_path):
         if filename.endswith(".json") and not file_exists_in_destination(
             filename, destination_path
@@ -59,4 +53,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(source_path, destination_path)

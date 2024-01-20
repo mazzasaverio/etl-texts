@@ -5,7 +5,7 @@ from loguru import logger
 from openai import OpenAI
 import pandas as pd
 
-from src.use_cases.database.db_connection import PdfDownload, Session, create_tables
+from database.db_connection import FileDownload, Session, create_tables
 
 
 # Load environment variables
@@ -57,6 +57,8 @@ def process_file(file_name):
     with open(file_path, "r") as file:
         data = json.load(file)
 
+    logger.info(f"Processing file: {file_name}")
+
     text_analyzed = data["tot_text_cleaned"][:2500]
     analysis_result = analyze_text_with_gpt3(text_analyzed)
 
@@ -65,8 +67,8 @@ def process_file(file_name):
 
     # Database operations
     with Session() as session:
-        query = session.query(PdfDownload).filter(
-            PdfDownload.keywords_namefile == data["filename"]
+        query = session.query(FileDownload).filter(
+            FileDownload.file_name == data["filename"]
         )
         df = pd.read_sql(query.statement, session.bind)
 
@@ -99,14 +101,17 @@ def file_already_processed(file_name):
 
 
 def main():
-    list_files = os.listdir(source_path)[:2]
+    list_files = os.listdir(source_path)[:2010]
     logger.info(f"Files to process: {list_files}")
-    for file_name in list_files:
-        if file_name.endswith(".json") and not file_already_processed(file_name):
-            logger.info(f"Processing file: {file_name}")
-            process_file(file_name)
-        else:
-            logger.info(f"Skipping already processed file: {file_name}")
+    list_final = [
+        file
+        for file in list_files
+        if file.endswith(".json") and not file_already_processed(file)
+    ]
+    logger.info("Starting processing {} files".format(len(list_final)))
+    for file_name in list_final:
+        # logger.info(f"Processing file: {file_name}")
+        process_file(file_name)
 
 
 if __name__ == "__main__":

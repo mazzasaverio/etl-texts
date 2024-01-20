@@ -6,8 +6,8 @@ custom_tree_and_files_corrected.txt
 code_report.py
 *.pdf
 .ipynb
-/data*
-data
+
+*.zip
 archive
 /archive/*
 # C extensions
@@ -38,7 +38,7 @@ MANIFEST
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
-
+data_new/*/*
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt

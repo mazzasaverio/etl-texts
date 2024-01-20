@@ -25,7 +25,7 @@ model_name = "facebook/m2m100_418M"
 tokenizer = M2M100Tokenizer.from_pretrained(model_name)
 model = M2M100ForConditionalGeneration.from_pretrained(model_name)
 
-# from langdetect import detect
+from langdetect import detect
 
 
 def translate_text(text, source_language, target_language):
@@ -43,8 +43,10 @@ def translate_text(text, source_language, target_language):
         "vie": "vi",  # Vietnamese
         "zho": "zh",  # Chinese
     }
-
-    source_language = language_code_map.get(source_language, source_language)
+    source_language = detect(text)
+    # logger.info(f"Detected source language: {source_language}")
+    # source_language = language_code_map.get(source_language)
+    # logger.info(f"Source language: {source_language}")
 
     if source_language == target_language:
         return text  # Skip translation if languages are the same
@@ -65,17 +67,6 @@ def translate_text(text, source_language, target_language):
             f"Error in translation from {source_language} to {target_language}: {e}"
         )
         return text
-
-
-def process_files(source_dir, dest_dir, target_lang):
-    """Process each JSON file in the source directory."""
-    for file in tqdm(os.listdir(source_dir)):
-        # logger.info(f"Processing file {file}")
-        if file.endswith(".json") and not translation_exists(file, dest_dir):
-            file_path = os.path.join(source_dir, file)
-            with open(file_path, "r") as json_file:
-                data = json.load(json_file)
-                translate_and_save(data, file, dest_dir, target_lang)
 
 
 def translate_and_save(data, file_name, dest_dir, target_lang):
@@ -109,5 +100,16 @@ def translation_exists(file_name, dest_dir):
     return file_name in os.listdir(dest_dir)
 
 
+def main(source_dir, dest_dir, target_lang):
+    """Process each JSON file in the source directory."""
+    for file in tqdm(os.listdir(source_dir)):
+        # logger.info(f"Processing file {file}")
+        if file.endswith(".json") and not translation_exists(file, dest_dir):
+            file_path = os.path.join(source_dir, file)
+            with open(file_path, "r") as json_file:
+                data = json.load(json_file)
+                translate_and_save(data, file, dest_dir, target_lang)
+
+
 if __name__ == "__main__":
-    process_files(source_path, destination_path, target_language)
+    main(source_path, destination_path, target_language)

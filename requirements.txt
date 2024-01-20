@@ -1,3 +1,4 @@
+datasets==2.16.1
 effdet==0.4.1
 ipykernel==6.28.0
 loguru==0.7.2
